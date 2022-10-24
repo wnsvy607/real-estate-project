@@ -10,7 +10,7 @@
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item v-for="item in commonItems" :key="item.title" 
-        router :to="{name: `${item.name}`}" exact link>
+        router :to="{name: `${item.name}`}" exact>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -29,7 +29,8 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list dense nav>
-        <v-list-item v-for="item in adminItems" :key="item.title" link>
+        <v-list-item v-for="item in adminItems" :key="item.title" 
+        router :to="{name: `${item.name}`}" exact>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -58,16 +59,16 @@ export default {
   data: () => ({
     drawer: null,
     commonItems: [
-      { title: "로그인", icon: "mdi-view-dashboard", name: 'login' },
+      { title: "로그인", icon: "mdi-login", name: 'login' },
       { title: "매물 등록/수정", icon: "mdi-image", name:'home' },
-      { title: "매물 보기", icon: "mdi-help-box", name:'home' },
-      { title: "고객 데이터 열람 / 입력", icon: "mdi-help-box", name:'home' },
+      { title: "매물 보기", icon: "mdi-map", name:'home' },
+      { title: "고객 데이터 열람 / 입력", icon: "mdi-account", name:'home' },
     ],
     adminItems: [
-      { title: "IP/기기 차단", icon: "mdi-help-box", name:'home' },
-      { title: "사용자 데이터 관리", icon: "mdi-help-box", name:'home' },
-      { title: "고객 데이터 관리", icon: "mdi-help-box", name:'home' },
-      { title: "매물 정보 관리", icon: "mdi-help-box", name:'home' },
+      { title: "IP/기기 차단", icon: "mdi-cancel", name:'home' },
+      { title: "사용자 데이터 관리", icon: "mdi-card-account-details", name:'home' },
+      { title: "고객 데이터 관리", icon: "mdi-database", name:'home' },
+      { title: "매물 정보 관리", icon: "mdi-home-group", name:'home' },
     ],
     right: null,
   }),
