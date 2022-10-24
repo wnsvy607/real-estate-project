@@ -27,7 +27,6 @@ export default {
     // script 태그 객체 생성
     const script = document.createElement("script");
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_KAKAOMAP_KEY}`;
-    console.log(`${process.env.VUE_APP_KAKAOMAP_KEY}`);
     /* global kakao */
     script.addEventListener("load", () => {
       kakao.maps.load(this.initMap);
