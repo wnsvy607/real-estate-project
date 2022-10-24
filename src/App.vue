@@ -60,8 +60,8 @@ export default {
     drawer: null,
     commonItems: [
       { title: "로그인", icon: "mdi-login", name: 'login' },
-      { title: "매물 등록/수정", icon: "mdi-image", name:'home' },
-      { title: "매물 보기", icon: "mdi-map", name:'home' },
+      { title: "매물 등록/수정", icon: "mdi-image", name:'map' },
+      { title: "매물 보기", icon: "mdi-map", name:'map' },
       { title: "고객 데이터 열람 / 입력", icon: "mdi-account", name:'home' },
     ],
     adminItems: [

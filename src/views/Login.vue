@@ -1,5 +1,14 @@
 <template>
-    <v-container>
-        로그인 페이지
-    </v-container>
+    <div>
+        <Login/>
+    </div>        
 </template>
+
+<script>
+    import Login from '../components/Login/Login.vue';
+    export default {
+        components: {
+            Login,
+        }
+    }
+</script>
