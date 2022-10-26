@@ -22,9 +22,6 @@
             <v-btn color="indigo" dark depressed block large @click="login()"
               >로그인</v-btn
             >
-            <v-btn color="indigo" dark depressed block large @click="logOut()"
-              >로그아웃</v-btn
-            >
           </div>
         </v-card>
       </v-col>
@@ -42,10 +39,6 @@ export default {
     return {
       email: null,
       password: null,
-      allUsers: [
-        { id: 1, name: "ljp", email: "wnsvy607@naver.com", password: "123" },
-        { id: 1, name: "lys", email: "lys29050@naver.com", password: "123456" },
-      ],
       isError: false,
       errorMessage: null,
     };
@@ -79,7 +72,7 @@ export default {
           this.errorMessage = err.response.data.errorMessage;
         });
     },
-    ...mapActions(["setToken", "setRole", "setRefresh", "logOut"]),
+    ...mapActions(["setToken", "setRole", "setRefresh"]),
   },
   computed: {
     ...mapState(["isLogin"]),

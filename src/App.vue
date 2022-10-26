@@ -9,27 +9,13 @@
 
       <v-divider></v-divider>
       <v-list dense nav>
-        <v-list-item
-          v-if="this.isLogin"
-          router
-          :to="{ name: `${myPage.name}` }"
-          exact
-        >
+        <v-list-item router :to="{ name: `${home.name}` }" exact>
           <v-list-item-icon>
-            <v-icon>{{ myPage.icon }}</v-icon>
+            <v-icon>{{ home.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ myPage.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item v-else router :to="{ name: `${loginBtn.name}` }" exact>
-          <v-list-item-icon>
-            <v-icon>{{ loginBtn.icon }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ loginBtn.title }}</v-list-item-title>
+            <v-list-item-title>{{ home.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -78,6 +64,18 @@
     <v-app-bar color="indigo" dark fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-appbar-title>부동산 매물 관리</v-appbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-if="!this.isLogin" router :to="`${loginBtn.name}`" icon>
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+      <div v-else>
+        <v-btn @click="logOut" icon>
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+        <v-btn router :to="`${myPage.name}`" icon>
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
+      </div>
     </v-app-bar>
     <v-main>
       <router-view></router-view>
@@ -89,7 +87,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     drawer: null,
@@ -110,9 +108,13 @@ export default {
     ],
     loginBtn: { title: "로그인", icon: "mdi-login", name: "login" },
     myPage: { title: "마이페이지", icon: "mdi-account-box", name: "mypage" },
+    home: { title: "홈", icon: "mdi-home", name: "home" },
   }),
   computed: {
     ...mapGetters(["isLogin"]),
+  },
+  methods: {
+    ...mapActions(["logOut"]),
   },
 };
 </script>

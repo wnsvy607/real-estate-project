@@ -1,16 +1,17 @@
 <template>
-  <KakaoMap />
+    <KakaoMap/>
 </template>
 
 
 <script>
-import KakaoMap from "../components/Map/KakaoMap.vue";
+import KakaoMap from '../components/Map/KakaoMap.vue';
 
-export default {
-  components: {
-    KakaoMap,
-  },
-};
+export default{
+
+    components: {
+        KakaoMap,
+    }
+}
 </script>
 
 <style>
