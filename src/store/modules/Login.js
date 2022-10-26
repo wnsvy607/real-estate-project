@@ -18,6 +18,9 @@ const getters = {
     },
     isLoginError(state) {
         return state.isLoginError;
+    },
+    errorMessage(state) {
+        return state.errorMessage;
     }
 };
 
@@ -26,16 +29,13 @@ const mutations = {
     setToken(state, payload) {
         state.token = payload.token;
         state.expireTime = new Date(payload.expireTime)
+        state.refresh = payload.refresh
+        state.refreshExpireTime = new Date(payload.refreshExpireTime);
         state.isLogin = true
     },
 
     setRole(state, _role) {
         state.role = _role
-    },
-
-    setRefresh(state, payload) {
-        state.refresh = payload.refresh
-        state.refreshExpireTime = new Date(payload.refreshExpireTime);
     },
 
     logOut(state) {
@@ -45,33 +45,42 @@ const mutations = {
         state.refresh = null;
         state.expireTime = null;
         alert('로그아웃 되었습니다.')
+    },
+
+    loginError(state) {
+        state.isLoginError = true;
+    },
+
+    errorMessage(state, message) {
+        state.errorMessage = message;
     }
 };
 
 const actions = {
     login({ state, commit }, loginObj) {
-        axios.post(process.env.VUE_APP_BACKEND_URL + "/api/basic/login",loginObj)
-        .then((res) => {
-            //islogin true
-        }).catch((err) => {
-            console.log(err);
-            //isloginerror => true
-            //errormessage
-            err.response.data.errorMessage;
-        })
+        axios.post(process.env.VUE_APP_BACKEND_URL + "/api/basic/login", loginObj)
+            .then((res) => {
+                let data = {
+                    token: res.data.grantType + " " + res.data.accessToken,
+                    expireTime: res.data.accessTokenExpireTime,
+                    refresh: res.data.grantType + " " + res.data.refreshToken,
+                    refreshExpireTime: res.data.refreshTokenExpireTime,
+                };
+                commit("setToken", data);
+                router.push({ name: "home" })
+            }).catch((err) => {
+                console.log(err);
+                //isloginerror => true
+                commit('loginError');
+                //errormessage
+                commit('errorMessage',err.response.data.errorMessage);
+            })
 
-        
 
-    },
-    // dispatch 로 부를 수 있다.
-    setToken: ({ commit }, payload) => {
-        commit('setToken', payload);
+
     },
     setRole: ({ commit }, _role) => {
         commit('setRole', _role);
-    },
-    setRefresh: ({ commit }, payload) => {
-        commit('setRefresh', payload);
     },
     logOut: ({ commit }) => {
         commit('logOut');
