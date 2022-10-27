@@ -14,6 +14,7 @@ const rejectAuthUser = (to, from, next) => {
     alert("이미 로그인을 하였습니다.")
     next("/")
   } else {
+    store.dispatch('newLogin')
     next()
   }
 }

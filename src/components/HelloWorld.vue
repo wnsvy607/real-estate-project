@@ -1,151 +1,191 @@
 <template>
-  <v-container>
-    <v-row class="text-center">
-      <v-col cols="12">
-        <v-img
-          :src="require('../assets/logo.svg')"
-          class="my-3"
-          contain
-          height="200"
-        />
-      </v-col>
-
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
-        </h1>
-
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a
-            href="https://community.vuetifyjs.com"
-            target="_blank"
-          >Discord Community</a>
-        </p>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          What's next?
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-row>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          Important Links
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-row>
-      </v-col>
-
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-3">
-          Ecosystem
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-row>
+  <v-container class="pa-10">
+    <v-row>
+      <v-col>
+        <v-data-table
+          :headers="headers"
+          :items="posts"
+          class="elevation-1"
+          @click:row="getPost"
+        >
+          <template v-slot:item.postId="{ item }">
+            {{ item.postId }}
+          </template>
+          <template v-slot:item.title="{ item }">
+            {{ item.title }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span v-if="!isProtected(item.accessLevel)">
+              <v-icon>mdi-lock</v-icon>
+            </span>
+          </template>
+          <template v-slot:item.answerStatus="{ item }">
+            <v-icon v-if="isAnswered(item.answerStatus)" color="green"
+              >mdi-checkbox-marked</v-icon
+            >
+          </template>
+          
+        </v-data-table>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-  export default {
-    name: 'HelloWorld',
-
-    data: () => ({
-      ecosystem: [
+import { mapActions } from "vuex";
+export default {
+  data() {
+    return {
+      headers: [
         {
-          text: 'vuetify-loader',
-          href: 'https://github.com/vuetifyjs/vuetify-loader',
+          text: "인덱스",
+          align: "start",
+          sortable: true,
+          value: "postId",
         },
+        { text: "제목", value: "title", sortable: false, align: "start" },
         {
-          text: 'github',
-          href: 'https://github.com/vuetifyjs/vuetify',
-        },
-        {
-          text: 'awesome-vuetify',
-          href: 'https://github.com/vuetifyjs/awesome-vuetify',
-        },
-      ],
-      importantLinks: [
-        {
-          text: 'Documentation',
-          href: 'https://vuetifyjs.com',
-        },
-        {
-          text: 'Chat',
-          href: 'https://community.vuetifyjs.com',
-        },
-        {
-          text: 'Made with Vuetify',
-          href: 'https://madewithvuejs.com/vuetify',
-        },
-        {
-          text: 'Twitter',
-          href: 'https://twitter.com/vuetifyjs',
-        },
-        {
-          text: 'Articles',
-          href: 'https://medium.com/vuetify',
+          text: "작성자",
+          value: "authorName",
+          sortable: false,
+          align: "center",
+        },        {
+          text: "답변 여부",
+          value: "answerStatus",
+          sortable: false,
+          align: "center",
         },
       ],
-      whatsNext: [
+      posts: [
         {
-          text: 'Explore components',
-          href: 'https://vuetifyjs.com/components/api-explorer',
+          postId: 1,
+          title: "게시글 1번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "ANSWERED",
         },
         {
-          text: 'Select a layout',
-          href: 'https://vuetifyjs.com/getting-started/pre-made-layouts',
+          postId: 2,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "UNANSWERED",
+        },        {
+          postId: 3,
+          title: "게시글 3번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "ANSWERED",
         },
         {
-          text: 'Frequently Asked Questions',
-          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
+          postId: 4,
+          title: "게시글 4번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "UNANSWERED",
+        },        {
+          postId: 5,
+          title: "게시글 5번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "UNANSWERED",
+        },
+        {
+          postId: 6,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "UNANSWERED",
+        },        {
+          postId: 7,
+          title: "게시글 1번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "ANSWERED",
+        },
+        {
+          postId: 8,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "ANSWERED",
+        },        {
+          postId: 1,
+          title: "게시글 1번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "ANSWERED",
+        },
+        {
+          postId: 2,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "ANSWERED",
+        },        {
+          postId: 1,
+          title: "게시글 1번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "UNANSWERED",
+        },
+        {
+          postId: 2,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "ANSWERED",
+        },        {
+          postId: 1,
+          title: "게시글 1번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "UNANSWERED",
+        },
+        {
+          postId: 2,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "UNANSWERED",
+        },        {
+          postId: 1,
+          title: "게시글 1번",
+          authorName: "최이섭",
+          accessLevel: "PUBLIC",
+          answerStatus: "UNANSWERED",
+        },
+        {
+          postId: 2,
+          title: "게시글 2번",
+          authorName: "이준표",
+          accessLevel: "PROTECTED",
+          answerStatus: "UNANSWERED",
         },
       ],
-    }),
-  }
+    };
+  },
+  name: "HelloWorld",
+  computed: {},
+  methods: {
+    ...mapActions(["getInfo"]),
+    al: () => {
+      alert("test");
+    },
+    getColor(calories) {
+      if (calories > 400) return "red";
+      else if (calories > 200) return "orange";
+      else return "green";
+    },
+    isProtected(accessLevel) {
+      if (accessLevel === "PROTECTED") return true;
+      else return false;
+    },
+    isAnswered(answerStatus) {
+      if (answerStatus === "ANSWERED") return true;
+      else return false;
+    },
+    getPost(item) {
+      alert(`${item.postId}`);
+    },
+  },
+};
 </script>

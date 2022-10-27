@@ -17,7 +17,7 @@ export default {
       const container = document.getElementById("map");
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 8,
+        level: 3,
       };
       this.map = new kakao.maps.Map(container, options);
     },
@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 #map {
-  width: 600px;
-  height: 800px;
+  width: 900px;
+  height: 820px;
 }
 </style>

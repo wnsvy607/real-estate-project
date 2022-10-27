@@ -9,8 +9,11 @@ const state = {
     expireTime: null,
     refresh: null,
     refreshExpireTime: null,
-    userInfo: null,
+    memberId: null,
+    memberName: null,
+    role: null,
 };
+
 
 const getters = {
     isLogin(state) {
@@ -21,7 +24,16 @@ const getters = {
     },
     errorMessage(state) {
         return state.errorMessage;
-    }
+    },
+    memberId(state) {
+        return state.memberId;
+    },
+    memberName(state) {
+        return state.memberName;
+    }, 
+    role(state) {
+        return state.role;
+    },
 };
 
 const mutations = {
@@ -32,10 +44,13 @@ const mutations = {
         state.refresh = payload.refresh
         state.refreshExpireTime = new Date(payload.refreshExpireTime);
         state.isLogin = true
+        axios.defaults.headers.common['Authorization'] = `${state.token}`;
     },
 
-    setRole(state, _role) {
-        state.role = _role
+    setUserInfo(state, payload) {
+        state.memberId = payload.memberId;
+        state.memberName = payload.memberName;
+        state.role = payload.role;
     },
 
     logOut(state) {
@@ -53,6 +68,10 @@ const mutations = {
 
     errorMessage(state, message) {
         state.errorMessage = message;
+    },
+
+    newLogin(state) {
+        state.isLoginError = false;
     }
 };
 
@@ -67,13 +86,20 @@ const actions = {
                     refreshExpireTime: res.data.refreshTokenExpireTime,
                 };
                 commit("setToken", data);
+                axios.get(process.env.VUE_APP_BACKEND_URL + "/api/member/info")
+                .then((res) => {
+                    commit("setUserInfo",res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
                 router.push({ name: "home" })
             }).catch((err) => {
                 console.log(err);
                 //isloginerror => true
                 commit('loginError');
                 //errormessage
-                commit('errorMessage',err.response.data.errorMessage);
+                commit('errorMessage', err.response.data.errorMessage);
             })
 
 
@@ -85,7 +111,12 @@ const actions = {
     logOut: ({ commit }) => {
         commit('logOut');
         router.push({ name: "home" })
+    },
+
+    newLogin({ commit }) {
+        commit('newLogin');
     }
+
 };
 
 export default {
