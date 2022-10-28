@@ -1,18 +1,14 @@
 <template>
-    <div>
-        {{ memberName }}님 환영합니다.
-    </div>
+  <div>
+    <h1>{{ memberName }}님 환영합니다.</h1>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-    computed: {
-        ...mapGetters(['memberId','memberName']),
-    },
-}
+  computed: {
+    ...mapGetters(["memberId", "memberName"]),
+  },
+};
 </script>
-
-<style>
-
-</style>

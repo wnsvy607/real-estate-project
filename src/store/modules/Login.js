@@ -59,7 +59,7 @@ const mutations = {
         state.role = null;
         state.refresh = null;
         state.expireTime = null;
-        alert('로그아웃 되었습니다.')
+        state.refreshExpireTime = null;
     },
 
     loginError(state) {
@@ -110,6 +110,15 @@ const actions = {
     },
     logOut: ({ commit }) => {
         commit('logOut');
+        axios.post(process.env.VUE_APP_BACKEND_URL + "/api/logout")
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        axios.defaults.headers.common['Authorization'] = '';
+        alert('로그아웃 되었습니다.')
         router.push({ name: "home" })
     },
 
